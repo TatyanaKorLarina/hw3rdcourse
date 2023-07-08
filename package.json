@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "name": "hw3rdcourse",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier-write ."
+  },
+  "author": "Tanya",
+  "license": "ISC",
+  "description": ""
+}
