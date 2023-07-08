@@ -1,5 +1,7 @@
 "use strict";
 
+const levels = [ { level: 1, }, { level: 2, }, { level: 3, }, ];
+
 const gameLevelEl = document.querySelector(".card-game");
 
 const renderCardGame = () => {
@@ -35,6 +37,7 @@ const renderCardGame = () => {
           }
         });
         levelButton.parentElement.classList.add('chosen');
+        currentLevel = levelButton;
         
       });
     });
