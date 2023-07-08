@@ -67,3 +67,75 @@ const renderCardGame = () => {
 };
 
 renderCardGame();
+
+
+const deck = document.getElementById("deck");
+function renderFrontDeck() {
+    const deckCards = `
+      <div class="top">
+        <div class="time">
+          <div class="time-span">
+            <div class="minutes">min</div>
+            <div class="seconds">sec</div>
+          </div>
+          <div class="time-numbers">00.00</div>
+        </div>
+        <button class="restart">Начать заново</button>
+      </div>
+      <div class="cards">
+        <div class="card-front"></div> 
+        <div class="top">
+        <div class="time">
+          <div class="time-span">
+            <div class="minutes">min</div>
+            <div class="seconds">sec</div>
+          </div>
+          <div class="time-numbers">00.00</div>
+        </div>
+        <button class="restart">Начать заново</button>
+      </div>
+        <div class="card-back"></div>
+      </div>`;
+      
+    deck.innerHTML = deckCards;
+  
+    const suits = ['<img src="./img/spades.svg" class="suit">',
+                        '<img src="./img/hearts.svg" class="suit">', 
+                        '<img src="./img/diamonds.svg" class="suit">', 
+                        '<img src="./img/clubs.svg" class="suit">'];
+    const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6'];
+
+   
+    let cards = [];
+  
+    for (let i = 0; i < suits.length; i++) {
+      for (let j = 0; j < ranks.length; j++) {
+        let card = {
+          symbol: suits[i],
+          value: ranks[j]
+        };
+        cards.push(card);
+      }
+    }
+  
+    let frontDeckHtml = '<div class="row">';
+    for (let i = 0; i < 36; i++) {
+      frontDeckHtml += `<div class="card ${cards[i].value}">`;
+      
+      frontDeckHtml += `<div class="symbol-top-left"><div>${cards[i].value}</div><div class="block-symbol">${cards[i].symbol}</div></div>
+                     <div class="value-center my-svg">${cards[i].symbol}</div>
+                     <div class="symbol-bottom-right"><div>${cards[i].value}</div><div class="block-symbol">${cards[i].symbol}</div></div>`;
+      frontDeckHtml += `</div>`;
+    }
+    frontDeckHtml += `</div>`;
+    document.querySelector('.card-front').innerHTML = frontDeckHtml;
+  
+    let backDeckHtml = '<div class="row">';
+    for (let i = 0; i < 36; i++) {
+        backDeckHtml += `<div class="card-back"><img src="./img/back.svg"></div>`;
+        }
+    backDeckHtml += `</div>`;
+    document.querySelector('.card-back').innerHTML = backDeckHtml;
+  }
+
+  renderFrontDeck();
