@@ -1,16 +1,23 @@
 {
   "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "html-webpack-plugin": "^5.5.3",
     "husky": "^8.0.3",
+    "mini-css-extract-plugin": "^2.7.6",
     "prettier": "^3.0.0",
+    "style-loader": "^3.3.3",
     "stylelint": "^15.10.1",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-prettier": "^4.0.0",
     "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   },
   "name": "hw3rdcourse",
   "version": "1.0.0",
@@ -21,7 +28,9 @@
     "lint:js": "eslint **.js",
     "lint:css": "stylelint **.css",
     "prepare": "husky install",
-    "lint": "npm run lint:js && npm run lint:css"
+    "lint": "npm run lint:js && npm run lint:css",
+    "build": "SET NODE_ENV=production && webpack",
+    "start": "webpack-dev-server --open"
   },
   "author": "Tanya",
   "license": "ISC",

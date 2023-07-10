@@ -1,5 +1,6 @@
-"extends": 
+{"extends": 
 [
   "stylelint-config-standard", 
   "stylelint-prettier/recommended"
   ]
+}
