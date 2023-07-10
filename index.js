@@ -1,5 +1,5 @@
 "use strict";
-import "./style.css";
+//import "./style.css";
 const levels = [{ level: 1 }, { level: 2 }, { level: 3 }];
 
 const gameLevelEl = document.querySelector(".card-game");
