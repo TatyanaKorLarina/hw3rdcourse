@@ -1,9 +1,7 @@
-/* stylelint-disable CssSyntaxError */
 /* stylelint-disable prettier/prettier */
-/* stylelint-disable CssSyntaxError */
-/* stylelint-disable-next-line CssSyntaxError */
 /* stylelint-disable prettier/prettier */
-/* stylelint-disable shorthand-property-no-redundant-values */
+/* stylelint-disable comment-empty-line-before */
+/* stylelint-disable comment-whitespace-inside */
 
 * {
   margin: 0;
@@ -79,7 +77,6 @@ body {
   color: var(--blue-100, #0080c1);
   text-align: center;
   font-size: 64px;
-  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
   font-family: StratosSkyeng;
   font-style: normal;
   font-weight: 400;
