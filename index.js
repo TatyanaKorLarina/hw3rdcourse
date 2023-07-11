@@ -1,5 +1,5 @@
 "use strict";
-import "./style.css";
+//import "./style.css";
 const gameLevelEl = document.querySelector(".deck");
 
 const renderCardGame = () => {
@@ -178,6 +178,12 @@ const startGame = (startLevel) => {
             }
         })
     );
+    setTimeout(() => {
+        cards.forEach((card) => card.classList.remove("flip"));
+        
+    }, 5000);
+    cards.forEach((card) => card.classList.add("flip"));
+
 };
 
 const shuffle = (array) => {
