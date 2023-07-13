@@ -1,3 +1,6 @@
+/*!*************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./style.css ***!
+  \*************************************************************/
 /* stylelint-disable prettier/prettier */
 /* stylelint-disable prettier/prettier */
 /* stylelint-disable comment-empty-line-before */
@@ -15,7 +18,7 @@ a {
 
 @font-face {
   font-family: StratosSkyeng;
-  src: url("/statosskyeng-v1.001/Desktop\ fonts/stratosskyeng-regular.otf")
+  src: url(8765b4fa6f0337532589.otf)
     format("opentype");
 }
 
@@ -188,3 +191,6 @@ body {
 }
 
 
+
+
+/*# sourceMappingURL=main.css.map*/
