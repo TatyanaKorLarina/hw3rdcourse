@@ -64,10 +64,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const gameLevelEl = document.querySelector(".deck");
-
+const resultGame = document.querySelector(".result");
+const resultContainer = document.querySelector(".res-container");
+const gameScreen = document.querySelector(".whole");
 const renderCardGame = () => {
     topGame.innerHTML = "";
+    resultGame.innerHTML = "";
+    resultContainer.innerHTML = "";
 
+    resultGame.classList.remove("result");
+    resultContainer.classList.remove("res-container");
+    gameScreen.classList.remove("back-result");
     const cardGameHTML = `
         <form class="game">
             <h1 class="title">Выбери сложность</h1>
@@ -131,7 +138,7 @@ const renderCardGame = () => {
                 'input[type="radio"]:checked'
             ).value;
 
-            console.log(startLevel);
+            
             startGame(startLevel);
         });
     }
@@ -158,13 +165,36 @@ const startGame = (startLevel) => {
     let firstCard = null;
     let secondCard = null;
     let clickable = true;
+    let Interval;
+    let seconds = 0;
+    let tens = 0;
 
     const restartButton = document.createElement("button");
     restartButton.textContent = "Начать заново";
     restartButton.classList.add("restart");
     const timer = document.createElement("div");
-    timer.textContent = "00.00";
-    timer.classList.add("timer-counting");
+    //timer.textContent = "00.00";
+    //timer.classList.add("timer-counting");
+    const appendSeconds = document.createElement("span"); // timer
+    const appendTens = document.createElement("span"); // timer
+    appendSeconds.textContent = "00";
+    appendTens.textContent = "00";
+    appendSeconds.classList.add("timer-count");
+    appendTens.classList.add("timer-count");
+    const dot = document.createElement("span");
+    dot.textContent = ".";
+    dot.classList.add("timer-count");
+
+    timer.append(appendSeconds, dot, appendTens);
+
+    const imgResult = document.createElement("img");
+    imgResult.setAttribute("src", "static/celebration.png");
+    const headerResult = document.createElement("h3");
+    headerResult.textContent = "Вы выиграли!";
+    headerResult.classList.add("win-text");
+    const timeResult = document.createElement("h3");
+    timeResult.textContent = "Затраченное время!";
+    timeResult.classList.add("time-left");
 
     const gameSection = document.querySelector(".deck");
     const gameTable = document.createElement("div");
@@ -174,7 +204,8 @@ const startGame = (startLevel) => {
 
     gameSection.innerHTML = "";
     topGame.innerHTML = "";
-
+    resultGame.innerHTML = "";
+    gameTable.classList.add("game-table");
     gameTable.classList.add("game-table");
 
     shuffle(doubleCards);
@@ -189,10 +220,35 @@ const startGame = (startLevel) => {
     const cards = document.querySelectorAll(".game-card");
 
     restartButton.addEventListener("click", renderCardGame);
+    
+    function startTimer() {
+        tens++;
 
+        if (tens < 9) {
+            appendTens.innerHTML = "0" + tens;
+        }
+
+        if (tens > 9) {
+            appendTens.innerHTML = tens;
+        }
+
+        if (tens > 99) {
+            seconds++;
+            appendSeconds.innerHTML = "0" + seconds;
+            tens = 0;
+            appendTens.innerHTML = "0" + 0;
+        }
+
+        if (seconds > 9) {
+            appendSeconds.innerHTML = seconds;
+        }
+    }
+;
     
     cards.forEach((card, index) =>
         card.addEventListener("click", () => {
+            clearInterval(Interval);
+            Interval = setInterval(startTimer, 10);
             if (
                 clickable === true &&
                 !card.classList.contains("successfully")
@@ -224,23 +280,67 @@ const startGame = (startLevel) => {
                             firstCard = null;
                             secondCard = null;
                             clickable = true;
-                            alert("Вы победили!");
+                            //alert("Вы победили!");
                           }, 500);
                     } else {
-                      alert("Вы проиграли!");
+                        clearInterval(Interval);
+                      //alert("Вы проиграли!");
                       setTimeout(() => {
-                            cards[firstCard].classList.remove("flip");
-                            cards[secondCard].classList.remove("flip");
+                        appendSeconds.classList.add("timer-res");
+                        appendTens.classList.add("timer-res");
+                        dot.classList.add("timer-res");
 
-                            firstCard = null;
-                            secondCard = null;
-                            clickable = true;
-                          }, 500);
+                        imgResult.setAttribute("src", "static/dead.png");
+                        headerResult.textContent = "Вы проиграли!";
+                        headerResult.classList.add("win-text");
+
+                        resultGame.classList.add("result");
+                        resultGame.append(
+                            imgResult,
+                            headerResult,
+                            timeResult,
+                            timer,
+                            restartButton
+                        );
+                        resultContainer.classList.add("res-container");
+                        resultContainer.append(resultGame);
+                        gameScreen.classList.add("back-result");
+                    }, 500);
                     }
                 }
             }
+            if (
+                Array.from(cards).every((card) =>
+                    card.className.includes("flip")
+                )
+            ) {
+                clearInterval(Interval);
+                setTimeout(() => {
+                    appendSeconds.classList.add("timer-res");
+                    appendTens.classList.add("timer-res");
+                    dot.classList.add("timer-res");
+
+                    resultGame.classList.add("result");
+                    resultGame.append(
+                        imgResult,
+                        headerResult,
+                        timeResult,
+                        timer,
+                        restartButton
+                    );
+                    resultContainer.classList.add("res-container");
+                    resultContainer.append(resultGame);
+                    gameScreen.classList.add("back-result");
+                }, 500);
+            }
         })
     );
+    setTimeout(() => {
+        cards.forEach((card) => card.classList.remove("flip"));
+        
+    }, 5000);
+    cards.forEach((card) => card.classList.add("flip"));
+
 };
 
 const shuffle = (array) => {

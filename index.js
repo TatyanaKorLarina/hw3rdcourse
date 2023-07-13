@@ -1,10 +1,17 @@
 "use strict";
-import "./style.css";
+//import "./style.css";
 const gameLevelEl = document.querySelector(".deck");
-
+const resultGame = document.querySelector(".result");
+const finalScreen = document.querySelector(".final-screen");
+const gameScreen = document.querySelector(".whole");
 const renderCardGame = () => {
     topGame.innerHTML = "";
+    resultGame.innerHTML = "";
+    finalScreen.innerHTML = "";
 
+    resultGame.classList.remove("result");
+    finalScreen.classList.remove("final-screen");
+    gameScreen.classList.remove("dark-result");
     const cardGameHTML = `
         <form class="game">
             <h1 class="title">Выбери сложность</h1>
@@ -41,7 +48,6 @@ const renderCardGame = () => {
     const levelEl = document.querySelector(".levels");
     const startButton = document.querySelector(".start-button");
 
-    
     const buttonsLevel = document.querySelectorAll(".level");
     for (const button of buttonsLevel) {
         button.addEventListener("click", function () {
@@ -52,7 +58,6 @@ const renderCardGame = () => {
         });
     }
 
-    
     function isChosenLevel() {
         levelEl.addEventListener("change", (event) => {
             if (event.target.matches('input[type="radio"]')) {
@@ -65,10 +70,9 @@ const renderCardGame = () => {
     function chooseLevel() {
         startButton.addEventListener("click", () => {
             const startLevel = levelEl.querySelector(
-                'input[type="radio"]:checked'
+                'input[type="radio"]:checked',
             ).value;
 
-            console.log(startLevel);
             startGame(startLevel);
         });
     }
@@ -76,18 +80,18 @@ const renderCardGame = () => {
 };
 
 const createGameCard = (defaultIcon, flippedCardIcon) => {
-  const card = document.createElement("div");
-  card.classList.add("game-card");
+    const card = document.createElement("div");
+    card.classList.add("game-card");
 
-  const notFlippedCardI = document.createElement("img");
-  const flippedCardI = document.createElement("img");
+    const notFlippedCardI = document.createElement("img");
+    const flippedCardI = document.createElement("img");
 
-  notFlippedCardI.setAttribute("src", `${defaultIcon}`);
-  flippedCardI.setAttribute("src", `${flippedCardIcon}`);
+    notFlippedCardI.setAttribute("src", `${defaultIcon}`);
+    flippedCardI.setAttribute("src", `${flippedCardIcon}`);
 
-  card.append(flippedCardI, notFlippedCardI);
+    card.append(flippedCardI, notFlippedCardI);
 
-  return card;
+    return card;
 };
 
 const topGame = document.querySelector(".top");
@@ -95,13 +99,35 @@ const startGame = (startLevel) => {
     let firstCard = null;
     let secondCard = null;
     let clickable = true;
+    let Interval;
+    let seconds = 0;
+    let tens = 0;
 
     const restartButton = document.createElement("button");
     restartButton.textContent = "Начать заново";
     restartButton.classList.add("restart");
     const timer = document.createElement("div");
-    timer.textContent = "00.00";
-    timer.classList.add("timer-counting");
+
+    const appendSeconds = document.createElement("spent");
+    const appendTens = document.createElement("spent");
+    appendSeconds.textContent = "00";
+    appendTens.textContent = "00";
+    appendSeconds.classList.add("timer-count");
+    appendTens.classList.add("timer-count");
+    const point = document.createElement("spent");
+    point.textContent = ".";
+    point.classList.add("timer-count");
+
+    timer.append(appendSeconds, point, appendTens);
+
+    const imgResult = document.createElement("img");
+    imgResult.setAttribute("src", "static/celebration.png");
+    const titleResult = document.createElement("h3");
+    titleResult.textContent = "Вы выиграли!";
+    titleResult.classList.add("victory");
+    const timeResult = document.createElement("h3");
+    timeResult.textContent = "Затраченное время!";
+    timeResult.classList.add("elapsed-time");
 
     const gameSection = document.querySelector(".deck");
     const gameTable = document.createElement("div");
@@ -111,13 +137,14 @@ const startGame = (startLevel) => {
 
     gameSection.innerHTML = "";
     topGame.innerHTML = "";
-
+    resultGame.innerHTML = "";
+    gameTable.classList.add("game-table");
     gameTable.classList.add("game-table");
 
     shuffle(doubleCards);
 
     doubleCards.forEach((icon) =>
-        gameTable.append(createGameCard("./static/back.svg", icon))
+        gameTable.append(createGameCard("./static/back.svg", icon)),
     );
 
     topGame.append(timer, restartButton);
@@ -127,9 +154,32 @@ const startGame = (startLevel) => {
 
     restartButton.addEventListener("click", renderCardGame);
 
-    
+    function startTimer() {
+        tens++;
+
+        if (tens < 9) {
+            appendTens.innerHTML = "0" + tens;
+        }
+
+        if (tens > 9) {
+            appendTens.innerHTML = tens;
+        }
+
+        if (tens > 99) {
+            seconds++;
+            appendSeconds.innerHTML = "0" + seconds;
+            tens = 0;
+            appendTens.innerHTML = "0" + 0;
+        }
+
+        if (seconds > 9) {
+            appendSeconds.innerHTML = seconds;
+        }
+    }
     cards.forEach((card, index) =>
         card.addEventListener("click", () => {
+            clearInterval(Interval);
+            Interval = setInterval(startTimer, 10);
             if (
                 clickable === true &&
                 !card.classList.contains("successfully")
@@ -154,120 +204,152 @@ const startGame = (startLevel) => {
                         cards[firstCard].firstElementChild.src ===
                         cards[secondCard].firstElementChild.src
                     ) {
-                      setTimeout(() => {
-                        cards[firstCard].classList.add("successfully");
-                        cards[secondCard].classList.add("successfully");
+                        setTimeout(() => {
+                            cards[firstCard].classList.add("successfully");
+                            cards[secondCard].classList.add("successfully");
 
                             firstCard = null;
                             secondCard = null;
                             clickable = true;
-                            alert("Вы победили!");
-                          }, 500);
+                            //alert("Вы победили!");
+                        }, 500);
                     } else {
-                      alert("Вы проиграли!");
-                      setTimeout(() => {
-                            cards[firstCard].classList.remove("flip");
-                            cards[secondCard].classList.remove("flip");
+                        clearInterval(Interval);
+                        //alert("Вы проиграли!");
+                        setTimeout(() => {
+                            appendSeconds.classList.add("set-timer");
+                            appendTens.classList.add("set-timer");
+                            point.classList.add("set-timer");
 
-                            firstCard = null;
-                            secondCard = null;
-                            clickable = true;
-                          }, 500);
+                            imgResult.setAttribute("src", "static/dead.png");
+                            titleResult.textContent = "Вы проиграли!";
+                            titleResult.classList.add("victory");
+
+                            resultGame.classList.add("result");
+                            resultGame.append(
+                                imgResult,
+                                titleResult,
+                                timeResult,
+                                timer,
+                                restartButton,
+                            );
+                            finalScreen.classList.add("final-screen");
+                            finalScreen.append(resultGame);
+                            gameScreen.classList.add("dark-result");
+                        }, 500);
                     }
                 }
             }
-        })
+            if (
+                Array.from(cards).every((card) =>
+                    card.className.includes("flip"),
+                )
+            ) {
+                clearInterval(Interval);
+                setTimeout(() => {
+                    appendSeconds.classList.add("set-timer");
+                    appendTens.classList.add("set-timer");
+                    point.classList.add("set-timer");
+
+                    resultGame.classList.add("result");
+                    resultGame.append(
+                        imgResult,
+                        titleResult,
+                        timeResult,
+                        timer,
+                        restartButton,
+                    );
+                    finalScreen.classList.add("final-screen");
+                    finalScreen.append(resultGame);
+                    gameScreen.classList.add("dark-result");
+                }, 500);
+            }
+        }),
     );
     setTimeout(() => {
         cards.forEach((card) => card.classList.remove("flip"));
-        
     }, 5000);
     cards.forEach((card) => card.classList.add("flip"));
-
 };
 
 const shuffle = (array) => {
-  let currentIndex = array.length,
-      randomIndex;
+    let currentIndex = array.length,
+        randomIndex;
 
-  while (currentIndex !== 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
 
-      [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex],
-          array[currentIndex],
-      ];
-  }
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex],
+            array[currentIndex],
+        ];
+    }
 
-  return array;
+    return array;
 };
 
 const doubleCardsArray = (array) =>
-  array.reduce((res, current) => res.concat([current, current]), []);
+    array.reduce((res, current) => res.concat([current, current]), []);
 
 const generateCardsArray = (startLevel) => {
-  const cards = [
-    "./static/Spades A.png",
-    "./static/Spades K.png",
-    "./static/Spades Q.png",
-    "./static/Spades J.png",
-    "./static/Spades 10.png",
-    "./static/Spades 9.png",
-    "./static/Spades 8.png",
-    "./static/Spades 7.png",
-    "./static/Spades 6.png",
-    "./static/Hearts A.png",
-    "./static/Hearts K.png",
-    "./static/Hearts Q.png",
-    "./static/Hearts J.png",
-    "./static/Hearts 10.png",
-    "./static/Hearts 9.png",
-    "./static/Hearts 8.png",
-    "./static/Hearts 7.png",
-    "./static/Hearts 6.png",
-    "./static/Diamonds A.png",
-    "./static/Diamonds K.png",
-    "./static/Diamonds Q.png",
-    "./static/Diamonds J.png",
-    "./static/Diamonds 10.png",
-    "./static/Diamonds 9.png",
-    "./static/Diamonds 8.png",
-    "./static/Diamonds 7.png",
-    "./static/Diamonds 6.png",
-    "./static/Clubs A.png",
-    "./static/Clubs K.png",
-    "./static/Clubs Q.png",
-    "./static/Clubs J.png",
-    "./static/Clubs 10.png",
-    "./static/Clubs 9.png",
-    "./static/Clubs 8.png",
-    "./static/Clubs 7.png",
-    "./static/Clubs 6.png",
-  ];
-  cards.sort(() => Math.random() - 0.5);
-  
-  
-    
-  switch (startLevel) {
-    case "1":
-      cards.length = 3;
-      return cards;
-      
-    case "2":
-      cards.length = 6;
-      return cards;
-    case "3":
-      cards.length = 9;
-      return cards;
-    default:
-        break;
-  }
-} 
-;
+    const cards = [
+        "./static/Spades A.png",
+        "./static/Spades K.png",
+        "./static/Spades Q.png",
+        "./static/Spades J.png",
+        "./static/Spades 10.png",
+        "./static/Spades 9.png",
+        "./static/Spades 8.png",
+        "./static/Spades 7.png",
+        "./static/Spades 6.png",
+        "./static/Hearts A.png",
+        "./static/Hearts K.png",
+        "./static/Hearts Q.png",
+        "./static/Hearts J.png",
+        "./static/Hearts 10.png",
+        "./static/Hearts 9.png",
+        "./static/Hearts 8.png",
+        "./static/Hearts 7.png",
+        "./static/Hearts 6.png",
+        "./static/Diamonds A.png",
+        "./static/Diamonds K.png",
+        "./static/Diamonds Q.png",
+        "./static/Diamonds J.png",
+        "./static/Diamonds 10.png",
+        "./static/Diamonds 9.png",
+        "./static/Diamonds 8.png",
+        "./static/Diamonds 7.png",
+        "./static/Diamonds 6.png",
+        "./static/Clubs A.png",
+        "./static/Clubs K.png",
+        "./static/Clubs Q.png",
+        "./static/Clubs J.png",
+        "./static/Clubs 10.png",
+        "./static/Clubs 9.png",
+        "./static/Clubs 8.png",
+        "./static/Clubs 7.png",
+        "./static/Clubs 6.png",
+    ];
+    cards.sort(() => Math.random() - 0.5);
 
+    switch (startLevel) {
+        case "1":
+            cards.length = 3;
+            return cards;
+
+        case "2":
+            cards.length = 6;
+            return cards;
+        case "3":
+            cards.length = 9;
+            return cards;
+        default:
+            break;
+    }
+};
 const cardsApp = () => {
-  renderCardGame();
+    renderCardGame();
 };
 
 cardsApp();
