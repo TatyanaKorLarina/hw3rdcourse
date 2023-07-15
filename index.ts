@@ -1,17 +1,29 @@
 "use strict";
-//import "./style.css";
+
+import "./style.css";
 const gameLevelEl = document.querySelector(".deck");
 const resultGame = document.querySelector(".result");
 const finalScreen = document.querySelector(".final-screen");
 const gameScreen = document.querySelector(".whole");
 const renderCardGame = () => {
-    topGame.innerHTML = "";
-    resultGame.innerHTML = "";
-    finalScreen.innerHTML = "";
-
-    resultGame.classList.remove("result");
-    finalScreen.classList.remove("final-screen");
+    if (topGame) {
+        topGame.innerHTML = "";
+    }
+    if (resultGame) {
+        resultGame.innerHTML = "";
+        resultGame.classList.remove("result");
+    }
+   if (finalScreen) {
+        finalScreen.innerHTML = "";
+        finalScreen.classList.remove("final-screen");
+   }
+   if (gameScreen) {
     gameScreen.classList.remove("dark-result");
+}
+    
+    
+
+    
     const cardGameHTML = `
         <form class="game">
             <h1 class="title">Выбери сложность</h1>
@@ -43,43 +55,54 @@ const renderCardGame = () => {
         </form>
         `;
 
-    gameLevelEl.innerHTML = cardGameHTML;
+        if (gameLevelEl) {
+            gameLevelEl.innerHTML = cardGameHTML;
+        }
+        
 
-    const levelEl = document.querySelector(".levels");
-    const startButton = document.querySelector(".start-button");
+    const levelEl = document.querySelector(".levels") as HTMLInputElement;
+    const startButton = document.querySelector(".start-button")as HTMLButtonElement;
 
-    const buttonsLevel = document.querySelectorAll(".level");
+    const buttonsLevel: NodeListOf<Element> = document.querySelectorAll(".level");
     for (const button of buttonsLevel) {
         button.addEventListener("click", function () {
             for (const button of buttonsLevel) {
                 button.classList.remove("chosen");
             }
-            this.classList.add("chosen");
+            button.classList.add("chosen");
         });
     }
 
     function isChosenLevel() {
-        levelEl.addEventListener("change", (event) => {
-            if (event.target.matches('input[type="radio"]')) {
-                startButton.disabled = false;
-            }
-        });
+        
+        if (levelEl && startButton) {
+            levelEl.addEventListener("change", (event) => {
+                //@ts-ignore
+                if (event.target?.matches('input[type="radio"]')) {
+                    startButton.disabled = false;
+                }
+            });
+        }
     }
     isChosenLevel();
 
     function chooseLevel() {
+        if (startButton && levelEl) {
         startButton.addEventListener("click", () => {
+            //@ts-ignore
             const startLevel = levelEl.querySelector(
                 'input[type="radio"]:checked',
+                //@ts-ignore
             ).value;
 
             startGame(startLevel);
         });
     }
+    }
     chooseLevel();
 };
 
-const createGameCard = (defaultIcon, flippedCardIcon) => {
+const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | string) => {
     const card = document.createElement("div");
     card.classList.add("game-card");
 
@@ -95,11 +118,11 @@ const createGameCard = (defaultIcon, flippedCardIcon) => {
 };
 
 const topGame = document.querySelector(".top");
-const startGame = (startLevel) => {
-    let firstCard = null;
-    let secondCard = null;
+const startGame = (startLevel: string) => {
+    let firstCard: null | number = null;
+    let secondCard: null | number = null;
     let clickable = true;
-    let Interval;
+    let Interval: number| any;
     let seconds = 0;
     let tens = 0;
 
@@ -135,9 +158,16 @@ const startGame = (startLevel) => {
     const initCards = generateCardsArray(startLevel);
     const doubleCards = doubleCardsArray(initCards);
 
-    gameSection.innerHTML = "";
-    topGame.innerHTML = "";
-    resultGame.innerHTML = "";
+    if (gameSection) {
+        gameSection.innerHTML = "";
+    }
+    if (topGame) {
+        topGame.innerHTML = "";
+    }
+    if (resultGame) {
+        resultGame.innerHTML = "";
+    }
+   
     gameTable.classList.add("game-table");
     gameTable.classList.add("game-table");
 
@@ -146,9 +176,13 @@ const startGame = (startLevel) => {
     doubleCards.forEach((icon) =>
         gameTable.append(createGameCard("./static/back.svg", icon)),
     );
-
-    topGame.append(timer, restartButton);
-    gameSection.append(gameTable);
+    if (topGame) {
+      topGame.append(timer, restartButton);  
+    }
+    if (gameSection) {
+        gameSection.append(gameTable);
+    }
+    
 
     const cards = document.querySelectorAll(".game-card");
 
@@ -162,7 +196,7 @@ const startGame = (startLevel) => {
         }
 
         if (tens > 9) {
-            appendTens.innerHTML = tens;
+            appendTens.innerHTML = "" + tens;;
         }
 
         if (tens > 99) {
@@ -173,7 +207,7 @@ const startGame = (startLevel) => {
         }
 
         if (seconds > 9) {
-            appendSeconds.innerHTML = seconds;
+            appendSeconds.innerHTML = "" + seconds;
         }
     }
     cards.forEach((card, index) =>
@@ -201,13 +235,15 @@ const startGame = (startLevel) => {
                     firstCard !== secondCard
                 ) {
                     if (
-                        cards[firstCard].firstElementChild.src ===
-                        cards[secondCard].firstElementChild.src
-                    ) {
+                        //@ts-ignore
+                        cards[firstCard].firstElementChild.src === 
+                        //@ts-ignore
+                        cards[secondCard].firstElementChild.src) {
                         setTimeout(() => {
+                            if (firstCard && secondCard) {
                             cards[firstCard].classList.add("successfully");
                             cards[secondCard].classList.add("successfully");
-
+                            }
                             firstCard = null;
                             secondCard = null;
                             clickable = true;
@@ -224,18 +260,24 @@ const startGame = (startLevel) => {
                             imgResult.setAttribute("src", "static/dead.png");
                             titleResult.textContent = "Вы проиграли!";
                             titleResult.classList.add("victory");
-
-                            resultGame.classList.add("result");
-                            resultGame.append(
-                                imgResult,
-                                titleResult,
-                                timeResult,
-                                timer,
-                                restartButton,
-                            );
-                            finalScreen.classList.add("final-screen");
-                            finalScreen.append(resultGame);
-                            gameScreen.classList.add("dark-result");
+                            if (resultGame) {
+                               resultGame.classList.add("result");
+                                resultGame.append(
+                                    imgResult,
+                                    titleResult,
+                                    timeResult,
+                                    timer,
+                                    restartButton,
+                                ); 
+                            }
+                            if (finalScreen && resultGame) {
+                                finalScreen.classList.add("final-screen");
+                                finalScreen.append(resultGame);
+                            }
+                            if (gameScreen){
+                                gameScreen.classList.add("dark-result");
+                            }
+                            
                         }, 500);
                     }
                 }
@@ -250,18 +292,24 @@ const startGame = (startLevel) => {
                     appendSeconds.classList.add("set-timer");
                     appendTens.classList.add("set-timer");
                     point.classList.add("set-timer");
-
-                    resultGame.classList.add("result");
-                    resultGame.append(
-                        imgResult,
-                        titleResult,
-                        timeResult,
-                        timer,
-                        restartButton,
-                    );
-                    finalScreen.classList.add("final-screen");
-                    finalScreen.append(resultGame);
-                    gameScreen.classList.add("dark-result");
+                    if (resultGame) {
+                        resultGame.classList.add("result");
+                        resultGame.append(
+                            imgResult,
+                            titleResult,
+                            timeResult,
+                            timer,
+                            restartButton,
+                        );
+                    }
+                    if (finalScreen && resultGame) {
+                        finalScreen.classList.add("final-screen");
+                        finalScreen.append(resultGame);
+                    }
+                    if (gameScreen) {
+                        gameScreen.classList.add("dark-result");
+                    }
+                    
                 }, 500);
             }
         }),
@@ -272,7 +320,7 @@ const startGame = (startLevel) => {
     cards.forEach((card) => card.classList.add("flip"));
 };
 
-const shuffle = (array) => {
+const shuffle = (array: Array<string> | Array<number>) => {
     let currentIndex = array.length,
         randomIndex;
 
@@ -292,7 +340,7 @@ const shuffle = (array) => {
 const doubleCardsArray = (array) =>
     array.reduce((res, current) => res.concat([current, current]), []);
 
-const generateCardsArray = (startLevel) => {
+const generateCardsArray = (startLevel: string | Array<number>) => {
     const cards = [
         "./static/Spades A.png",
         "./static/Spades K.png",
