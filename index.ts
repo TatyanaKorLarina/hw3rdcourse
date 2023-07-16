@@ -1,11 +1,11 @@
 "use strict";
 
 import "./style.css";
-const gameLevelEl = document.querySelector(".deck");
-const resultGame = document.querySelector(".result");
-const finalScreen = document.querySelector(".final-screen");
-const gameScreen = document.querySelector(".whole");
-const renderCardGame = () => {
+const gameLevelEl: any = document.querySelector(".deck");
+const resultGame: any = document.querySelector(".result");
+const finalScreen: any = document.querySelector(".final-screen");
+const gameScreen: any = document.querySelector(".whole");
+const renderCardGame: any = () => {
     if (topGame) {
         topGame.innerHTML = "";
     }
@@ -24,7 +24,7 @@ const renderCardGame = () => {
     
 
     
-    const cardGameHTML = `
+    const cardGameHTML: any = `
         <form class="game">
             <h1 class="title">Выбери сложность</h1>
             <div class="levels">
@@ -60,10 +60,10 @@ const renderCardGame = () => {
         }
         
 
-    const levelEl = document.querySelector(".levels") as HTMLInputElement;
-    const startButton = document.querySelector(".start-button")as HTMLButtonElement;
+    const levelEl: any = document.querySelector(".levels") as HTMLInputElement;
+    const startButton: any = document.querySelector(".start-button")as HTMLButtonElement;
 
-    const buttonsLevel: NodeListOf<Element> = document.querySelectorAll(".level");
+    const buttonsLevel: any = document.querySelectorAll(".level");
     for (const button of buttonsLevel) {
         button.addEventListener("click", function () {
             for (const button of buttonsLevel) {
@@ -76,7 +76,7 @@ const renderCardGame = () => {
     function isChosenLevel() {
         
         if (levelEl && startButton) {
-            levelEl.addEventListener("change", (event) => {
+            levelEl.addEventListener("change", (event: any) => {
                 //@ts-ignore
                 if (event.target?.matches('input[type="radio"]')) {
                     startButton.disabled = false;
@@ -102,12 +102,12 @@ const renderCardGame = () => {
     chooseLevel();
 };
 
-const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | string) => {
+const createGameCard: any = (defaultIcon: object | string, flippedCardIcon: object | string) => {
     const card = document.createElement("div");
     card.classList.add("game-card");
 
-    const notFlippedCardI = document.createElement("img");
-    const flippedCardI = document.createElement("img");
+    const notFlippedCardI: any = document.createElement("img");
+    const flippedCardI: any = document.createElement("img");
 
     notFlippedCardI.setAttribute("src", `${defaultIcon}`);
     flippedCardI.setAttribute("src", `${flippedCardIcon}`);
@@ -117,8 +117,8 @@ const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | 
     return card;
 };
 
-const topGame = document.querySelector(".top");
-const startGame = (startLevel: string) => {
+const topGame: any = document.querySelector(".top");
+const startGame: any = (startLevel: string) => {
     let firstCard: null | number = null;
     let secondCard: null | number = null;
     let clickable = true;
@@ -126,37 +126,37 @@ const startGame = (startLevel: string) => {
     let seconds = 0;
     let tens = 0;
 
-    const restartButton = document.createElement("button");
+    const restartButton: any = document.createElement("button");
     restartButton.textContent = "Начать заново";
     restartButton.classList.add("restart");
-    const timer = document.createElement("div");
+    const timer: any = document.createElement("div");
 
-    const appendSeconds = document.createElement("spent");
-    const appendTens = document.createElement("spent");
+    const appendSeconds: any = document.createElement("spent");
+    const appendTens: any = document.createElement("spent");
     appendSeconds.textContent = "00";
     appendTens.textContent = "00";
     appendSeconds.classList.add("timer-count");
     appendTens.classList.add("timer-count");
-    const point = document.createElement("spent");
+    const point: any = document.createElement("spent");
     point.textContent = ".";
     point.classList.add("timer-count");
 
     timer.append(appendSeconds, point, appendTens);
 
-    const imgResult = document.createElement("img");
+    const imgResult: any = document.createElement("img");
     imgResult.setAttribute("src", "static/celebration.png");
-    const titleResult = document.createElement("h3");
+    const titleResult: any = document.createElement("h3");
     titleResult.textContent = "Вы выиграли!";
     titleResult.classList.add("victory");
-    const timeResult = document.createElement("h3");
+    const timeResult: any = document.createElement("h3");
     timeResult.textContent = "Затраченное время!";
     timeResult.classList.add("elapsed-time");
 
-    const gameSection = document.querySelector(".deck");
-    const gameTable = document.createElement("div");
+    const gameSection: any = document.querySelector(".deck");
+    const gameTable: any = document.createElement("div");
 
-    const initCards = generateCardsArray(startLevel);
-    const doubleCards = doubleCardsArray(initCards);
+    const initCards: any = generateCardsArray(startLevel);
+    const doubleCards: any = doubleCardsArray(initCards);
 
     if (gameSection) {
         gameSection.innerHTML = "";
@@ -173,7 +173,7 @@ const startGame = (startLevel: string) => {
 
     shuffle(doubleCards);
 
-    doubleCards.forEach((icon) =>
+    doubleCards.forEach((icon: any) =>
         gameTable.append(createGameCard("./static/back.svg", icon)),
     );
     if (topGame) {
@@ -186,7 +186,7 @@ const startGame = (startLevel: string) => {
 
     const cards = document.querySelectorAll(".game-card");
 
-    restartButton.addEventListener("click", renderCardGame);
+    restartButton?.addEventListener("click", renderCardGame);
 
     function startTimer() {
         tens++;
@@ -210,7 +210,7 @@ const startGame = (startLevel: string) => {
             appendSeconds.innerHTML = "" + seconds;
         }
     }
-    cards.forEach((card, index) =>
+    cards.forEach((card: any, index: any) =>
         card.addEventListener("click", () => {
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
@@ -283,7 +283,7 @@ const startGame = (startLevel: string) => {
                 }
             }
             if (
-                Array.from(cards).every((card) =>
+                Array.from(cards).every((card: any) =>
                     card.className.includes("flip"),
                 )
             ) {
@@ -320,9 +320,9 @@ const startGame = (startLevel: string) => {
     cards.forEach((card) => card.classList.add("flip"));
 };
 
-const shuffle = (array: Array<string> | Array<number>) => {
-    let currentIndex = array.length,
-        randomIndex;
+const shuffle: any = (array: Array<string> | Array<number>) => {
+    let currentIndex: any = array.length,
+        randomIndex: any;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -337,10 +337,10 @@ const shuffle = (array: Array<string> | Array<number>) => {
     return array;
 };
 
-const doubleCardsArray = (array) =>
-    array.reduce((res, current) => res.concat([current, current]), []);
+const doubleCardsArray: any = (array: any) =>
+    array.reduce((res: any, current: any) => res.concat([current, current]), []);
 
-const generateCardsArray = (startLevel: string | Array<number>) => {
+const generateCardsArray: any = (startLevel: string | Array<number>) => {
     const cards = [
         "./static/Spades A.png",
         "./static/Spades K.png",
@@ -396,7 +396,7 @@ const generateCardsArray = (startLevel: string | Array<number>) => {
             break;
     }
 };
-const cardsApp = () => {
+const cardsApp: any = () => {
     renderCardGame();
 };
 

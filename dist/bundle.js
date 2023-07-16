@@ -191,7 +191,7 @@ var startGame = function (startLevel) {
         gameSection.append(gameTable);
     }
     var cards = document.querySelectorAll(".game-card");
-    restartButton.addEventListener("click", renderCardGame);
+    restartButton === null || restartButton === void 0 ? void 0 : restartButton.addEventListener("click", renderCardGame);
     function startTimer() {
         tens++;
         if (tens < 9) {
