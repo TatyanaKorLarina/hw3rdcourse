@@ -6,6 +6,7 @@ const gameLevelEl = document.querySelector<HTMLElement>(".deck");
 const resultGame = document.querySelector<HTMLElement>(".result");
 const finalScreen = document.querySelector<HTMLElement>(".final-screen");
 const gameScreen = document.querySelector<HTMLElement>(".whole");
+const topGame = document.querySelector(".top");
 const renderCardGame = () => {
     if (topGame) {
         topGame.innerHTML = "";
@@ -61,25 +62,25 @@ const renderCardGame = () => {
         }
         
 
-        const levelEl: HTMLInputElement = document.querySelector(".levels") as HTMLInputElement;
-        const startButton: HTMLButtonElement = document.querySelector(".start-button") as HTMLButtonElement;
+        const levelEl: HTMLElement | null = document.querySelector(".levels");
+        const startButton: HTMLButtonElement | null = document.querySelector(".start-button");
 
-        const buttonsLevel: any = document.querySelectorAll(".level");
-        for (let button of buttonsLevel) {
-          button.addEventListener("click", function () {
-            for (let button of buttonsLevel) {
-              button.classList.remove("chosen");
+        const buttonsLevel = document.querySelectorAll(".level");
+        for (let button of buttonsLevel as any) {
+          button.parentElement?.addEventListener("click", function () {
+            for (let button of buttonsLevel as any) {
+              button.parentElement?.classList.remove("chosen");
             }
-            button.classList.add("chosen");
+            button.parentElement?.classList.add("chosen");
           });
         }
 
     function isChosenLevel() {
         
         if (levelEl && startButton) {
-            levelEl.addEventListener("change", (event) => {
-                //@ts-ignore
-                if (event.target?.matches('input[type="radio"]')) {
+            levelEl.addEventListener("change", (event: Event) => {
+                const target = event.target as HTMLInputElement;   
+                if (target.matches('input[type="radio"]')) {
                     startButton.disabled = false;
                 }
             });
@@ -89,19 +90,17 @@ const renderCardGame = () => {
 
     function chooseLevel() {
         if (startButton && levelEl) {
-        startButton.addEventListener("click", () => {
-            //@ts-ignore
-            const startLevel = levelEl.querySelector(
-                'input[type="radio"]:checked',
-                //@ts-ignore
-            ).value;
-
-            startGame(startLevel);
-        });
-    }
-    }
-    chooseLevel();
-};
+            startButton.addEventListener("click", () => {
+              const checkedInput: HTMLInputElement | null = levelEl.querySelector('input[type="radio"]:checked');
+              if (checkedInput) {
+                const startLevel = checkedInput.value;
+                startGame(startLevel);
+              }
+            });
+          }
+        }
+        
+        chooseLevel();}
 
 const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | string) => {
     const card = document.createElement("div");
@@ -118,10 +117,10 @@ const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | 
     return card;
 };
 
-const topGame = document.querySelector(".top");
+//const topGame = document.querySelector(".top");
 const startGame = (startLevel: string) => {
-    let firstCard: null | number = null;
-    let secondCard: null | number = null;
+    let firstCard: number | null = null;
+    let secondCard: number | null = null;;
     let clickable = true;
     let Interval: number | NodeJS.Timeout;
     let seconds = 0;
@@ -236,12 +235,12 @@ const startGame = (startLevel: string) => {
                     firstCard !== secondCard
                 ) {
                     if (
-                        //@ts-ignore
-                        cards[firstCard].firstElementChild.src === 
-                        //@ts-ignore
-                        cards[secondCard].firstElementChild.src) {
+                         //@ts-ignore
+                        cards[firstCard]?.firstElementChild?.src === 
+                         //@ts-ignore
+                        cards[secondCard]?.firstElementChild?.src) {
                         setTimeout(() => {
-                            if (firstCard && secondCard) {
+                            if (firstCard  && secondCard) {
                             cards[firstCard].classList.add("successfully");
                             cards[secondCard].classList.add("successfully");
                             }
