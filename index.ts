@@ -1,11 +1,12 @@
 "use strict";
 
 import "./style.css";
-const gameLevelEl: any = document.querySelector(".deck");
-const resultGame: any = document.querySelector(".result");
-const finalScreen: any = document.querySelector(".final-screen");
-const gameScreen: any = document.querySelector(".whole");
-const renderCardGame: any = () => {
+//import * as _ from "lodash";
+const gameLevelEl = document.querySelector<HTMLElement>(".deck");
+const resultGame = document.querySelector<HTMLElement>(".result");
+const finalScreen = document.querySelector<HTMLElement>(".final-screen");
+const gameScreen = document.querySelector<HTMLElement>(".whole");
+const renderCardGame = () => {
     if (topGame) {
         topGame.innerHTML = "";
     }
@@ -24,7 +25,7 @@ const renderCardGame: any = () => {
     
 
     
-    const cardGameHTML: any = `
+    const cardGameHTML = `
         <form class="game">
             <h1 class="title">Выбери сложность</h1>
             <div class="levels">
@@ -60,23 +61,23 @@ const renderCardGame: any = () => {
         }
         
 
-    const levelEl: any = document.querySelector(".levels") as HTMLInputElement;
-    const startButton: any = document.querySelector(".start-button")as HTMLButtonElement;
+        const levelEl: HTMLInputElement = document.querySelector(".levels") as HTMLInputElement;
+        const startButton: HTMLButtonElement = document.querySelector(".start-button") as HTMLButtonElement;
 
-    const buttonsLevel: any = document.querySelectorAll(".level");
-    for (const button of buttonsLevel) {
-        button.addEventListener("click", function () {
-            for (const button of buttonsLevel) {
-                button.classList.remove("chosen");
+        const buttonsLevel: any = document.querySelectorAll(".level");
+        for (let button of buttonsLevel) {
+          button.addEventListener("click", function () {
+            for (let button of buttonsLevel) {
+              button.classList.remove("chosen");
             }
             button.classList.add("chosen");
-        });
-    }
+          });
+        }
 
     function isChosenLevel() {
         
         if (levelEl && startButton) {
-            levelEl.addEventListener("change", (event: any) => {
+            levelEl.addEventListener("change", (event) => {
                 //@ts-ignore
                 if (event.target?.matches('input[type="radio"]')) {
                     startButton.disabled = false;
@@ -102,12 +103,12 @@ const renderCardGame: any = () => {
     chooseLevel();
 };
 
-const createGameCard: any = (defaultIcon: object | string, flippedCardIcon: object | string) => {
+const createGameCard = (defaultIcon: object | string, flippedCardIcon: object | string) => {
     const card = document.createElement("div");
     card.classList.add("game-card");
 
-    const notFlippedCardI: any = document.createElement("img");
-    const flippedCardI: any = document.createElement("img");
+    const notFlippedCardI= document.createElement("img");
+    const flippedCardI = document.createElement("img");
 
     notFlippedCardI.setAttribute("src", `${defaultIcon}`);
     flippedCardI.setAttribute("src", `${flippedCardIcon}`);
@@ -117,46 +118,46 @@ const createGameCard: any = (defaultIcon: object | string, flippedCardIcon: obje
     return card;
 };
 
-const topGame: any = document.querySelector(".top");
-const startGame: any = (startLevel: string) => {
+const topGame = document.querySelector(".top");
+const startGame = (startLevel: string) => {
     let firstCard: null | number = null;
     let secondCard: null | number = null;
     let clickable = true;
-    let Interval: number| any;
+    let Interval: number | NodeJS.Timeout;
     let seconds = 0;
     let tens = 0;
 
-    const restartButton: any = document.createElement("button");
+    const restartButton = document.createElement("button");
     restartButton.textContent = "Начать заново";
     restartButton.classList.add("restart");
-    const timer: any = document.createElement("div");
+    const timer = document.createElement("div");
 
-    const appendSeconds: any = document.createElement("spent");
-    const appendTens: any = document.createElement("spent");
+    const appendSeconds = document.createElement("spent");
+    const appendTens = document.createElement("spent");
     appendSeconds.textContent = "00";
     appendTens.textContent = "00";
     appendSeconds.classList.add("timer-count");
     appendTens.classList.add("timer-count");
-    const point: any = document.createElement("spent");
+    const point = document.createElement("spent");
     point.textContent = ".";
     point.classList.add("timer-count");
 
     timer.append(appendSeconds, point, appendTens);
 
-    const imgResult: any = document.createElement("img");
+    const imgResult = document.createElement("img");
     imgResult.setAttribute("src", "static/celebration.png");
-    const titleResult: any = document.createElement("h3");
+    const titleResult = document.createElement("h3");
     titleResult.textContent = "Вы выиграли!";
     titleResult.classList.add("victory");
-    const timeResult: any = document.createElement("h3");
+    const timeResult = document.createElement("h3");
     timeResult.textContent = "Затраченное время!";
     timeResult.classList.add("elapsed-time");
 
-    const gameSection: any = document.querySelector(".deck");
-    const gameTable: any = document.createElement("div");
+    const gameSection = document.querySelector(".deck");
+    const gameTable = document.createElement("div");
 
-    const initCards: any = generateCardsArray(startLevel);
-    const doubleCards: any = doubleCardsArray(initCards);
+    const initCards = generateCardsArray(startLevel);
+    const doubleCards = doubleCardsArray(initCards);
 
     if (gameSection) {
         gameSection.innerHTML = "";
@@ -173,7 +174,7 @@ const startGame: any = (startLevel: string) => {
 
     shuffle(doubleCards);
 
-    doubleCards.forEach((icon: any) =>
+    doubleCards.forEach((icon: string) =>
         gameTable.append(createGameCard("./static/back.svg", icon)),
     );
     if (topGame) {
@@ -210,7 +211,7 @@ const startGame: any = (startLevel: string) => {
             appendSeconds.innerHTML = "" + seconds;
         }
     }
-    cards.forEach((card: any, index: any) =>
+    cards.forEach((card, index) =>
         card.addEventListener("click", () => {
             clearInterval(Interval);
             Interval = setInterval(startTimer, 10);
@@ -283,7 +284,7 @@ const startGame: any = (startLevel: string) => {
                 }
             }
             if (
-                Array.from(cards).every((card: any) =>
+                Array.from(cards).every((card) =>
                     card.className.includes("flip"),
                 )
             ) {
@@ -320,9 +321,9 @@ const startGame: any = (startLevel: string) => {
     cards.forEach((card) => card.classList.add("flip"));
 };
 
-const shuffle: any = (array: Array<string> | Array<number>) => {
-    let currentIndex: any = array.length,
-        randomIndex: any;
+const shuffle = (array: Array<string> | Array<number>) => {
+    let currentIndex = array.length,
+        randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -337,11 +338,11 @@ const shuffle: any = (array: Array<string> | Array<number>) => {
     return array;
 };
 
-const doubleCardsArray: any = (array: any) =>
-    array.reduce((res: any, current: any) => res.concat([current, current]), []);
+const doubleCardsArray = (array: string[]): string[] =>
+    array.reduce((res: string[], current: string) => res.concat([current, current]), []);
 
-const generateCardsArray: any = (startLevel: string | Array<number>) => {
-    const cards = [
+const generateCardsArray = (startLevel: string | number[]): string[] => {
+    const cards: string[]  = [
         "./static/Spades A.png",
         "./static/Spades K.png",
         "./static/Spades Q.png",
@@ -379,6 +380,9 @@ const generateCardsArray: any = (startLevel: string | Array<number>) => {
         "./static/Clubs 7.png",
         "./static/Clubs 6.png",
     ];
+    
+    
+
     cards.sort(() => Math.random() - 0.5);
 
     switch (startLevel) {
@@ -394,9 +398,12 @@ const generateCardsArray: any = (startLevel: string | Array<number>) => {
             return cards;
         default:
             break;
+            
     }
+    return cards
 };
-const cardsApp: any = () => {
+
+const cardsApp = () => {
     renderCardGame();
 };
 
