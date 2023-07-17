@@ -235,10 +235,8 @@ const startGame = (startLevel: string) => {
                     firstCard !== secondCard
                 ) {
                     if (
-                         //@ts-ignore
-                        cards[firstCard]?.firstElementChild?.src === 
-                         //@ts-ignore
-                        cards[secondCard]?.firstElementChild?.src) {
+                        cards[firstCard].firstElementChild?.outerHTML ===
+                        cards[secondCard].firstElementChild?.outerHTML) {
                         setTimeout(() => {
                             if (firstCard  && secondCard) {
                             cards[firstCard].classList.add("successfully");
