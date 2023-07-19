@@ -7,7 +7,7 @@ function game() {
 function cardArray(cardsNum) {
     return Math.floor(Math.random() * cardsNum);
 }
-//const cards = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
+const cards = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'];
 function startLevel(cardsNum, array) {
     for (let i = 1; i <= cardsNum; i++) {
         array.push([
