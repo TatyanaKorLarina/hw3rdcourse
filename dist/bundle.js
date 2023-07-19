@@ -63,11 +63,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ "./style.css");
 
 
-var gameLevelEl = document.querySelector(".deck");
-var resultGame = document.querySelector(".result");
-var finalScreen = document.querySelector(".final-screen");
-var gameScreen = document.querySelector(".whole");
-var renderCardGame = function () {
+//import * as _ from "lodash";
+const gameLevelEl = document.querySelector(".deck");
+const resultGame = document.querySelector(".result");
+const finalScreen = document.querySelector(".final-screen");
+const gameScreen = document.querySelector(".whole");
+const topGame = document.querySelector(".top");
+const renderCardGame = () => {
     if (topGame) {
         topGame.innerHTML = "";
     }
@@ -82,32 +84,59 @@ var renderCardGame = function () {
     if (gameScreen) {
         gameScreen.classList.remove("dark-result");
     }
-    var cardGameHTML = "\n        <form class=\"game\">\n            <h1 class=\"title\">\u0412\u044B\u0431\u0435\u0440\u0438 \u0441\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u044C</h1>\n            <div class=\"levels\">\n\n                <label for=\"1\">\n                    <div class=\"level\">\n                        <input class=\"level-input\" id=\"1\" name=\"level\" value=\"1\" type=\"radio\">\n                        1\n                    </div>\n                </label>\n\n                <label for=\"2\">\n                    <div class=\"level\">\n                        <input class=\"level-input\" id=\"2\" name=\"level\" value=\"2\" type=\"radio\">\n                        2\n                    </div>\n                </label>\n\n                <label for=\"3\">\n                    <div class=\"level\">\n                        <input class=\"level-input\" id=\"3\" name=\"level\" value=\"3\" type=\"radio\">\n                        3\n                    </div>\n                </label>\n\n            </div>\n            <button type=\"submit\" class=\"start-button\" disabled>\u0421\u0442\u0430\u0440\u0442</button>\n        </form>\n        ";
+    const cardGameHTML = `
+        <form class="game">
+            <h1 class="title">Выбери сложность</h1>
+            <div class="levels">
+
+                <label for="1">
+                    <div class="level">
+                        <input class="level-input" id="1" name="level" value="1" type="radio">
+                        1
+                    </div>
+                </label>
+
+                <label for="2">
+                    <div class="level">
+                        <input class="level-input" id="2" name="level" value="2" type="radio">
+                        2
+                    </div>
+                </label>
+
+                <label for="3">
+                    <div class="level">
+                        <input class="level-input" id="3" name="level" value="3" type="radio">
+                        3
+                    </div>
+                </label>
+
+            </div>
+            <button type="submit" class="start-button" disabled>Старт</button>
+        </form>
+        `;
     if (gameLevelEl) {
         gameLevelEl.innerHTML = cardGameHTML;
     }
-    var levelEl = document.querySelector(".levels");
-    var startButton = document.querySelector(".start-button");
-    var buttonsLevel = document.querySelectorAll(".level");
-    var _loop_1 = function (button) {
+    const levelEl = document.querySelector(".levels");
+    const startButton = document.querySelector(".start-button");
+    const buttonsLevel = document.querySelectorAll(".level");
+    for (const button of buttonsLevel) {
         button.addEventListener("click", function () {
-            for (var _i = 0, buttonsLevel_2 = buttonsLevel; _i < buttonsLevel_2.length; _i++) {
-                var button_1 = buttonsLevel_2[_i];
-                button_1.classList.remove("chosen");
+            var _a;
+            if (buttonsLevel) {
+                for (const button of buttonsLevel) {
+                    button.classList.remove("chosen");
+                }
+                (_a = button.parentElement) === null || _a === void 0 ? void 0 : _a.classList.add("chosen");
             }
-            button.classList.add("chosen");
         });
-    };
-    for (var _i = 0, buttonsLevel_1 = buttonsLevel; _i < buttonsLevel_1.length; _i++) {
-        var button = buttonsLevel_1[_i];
-        _loop_1(button);
     }
+    ;
     function isChosenLevel() {
         if (levelEl && startButton) {
-            levelEl.addEventListener("change", function (event) {
-                var _a;
-                //@ts-ignore
-                if ((_a = event.target) === null || _a === void 0 ? void 0 : _a.matches('input[type="radio"]')) {
+            levelEl.addEventListener("change", (event) => {
+                const target = event.target;
+                if (target.matches('input[type="radio"]')) {
                     startButton.disabled = false;
                 }
             });
@@ -116,59 +145,62 @@ var renderCardGame = function () {
     isChosenLevel();
     function chooseLevel() {
         if (startButton && levelEl) {
-            startButton.addEventListener("click", function () {
-                //@ts-ignore
-                var startLevel = levelEl.querySelector('input[type="radio"]:checked').value;
-                startGame(startLevel);
+            startButton.addEventListener("click", () => {
+                const checkedInput = levelEl.querySelector('input[type="radio"]:checked');
+                if (checkedInput) {
+                    const startLevel = checkedInput.value;
+                    startGame(startLevel);
+                }
             });
         }
     }
     chooseLevel();
 };
-var createGameCard = function (defaultIcon, flippedCardIcon) {
-    var card = document.createElement("div");
+const createGameCard = (defaultIcon, flippedCardIcon) => {
+    const card = document.createElement("div");
     card.classList.add("game-card");
-    var notFlippedCardI = document.createElement("img");
-    var flippedCardI = document.createElement("img");
-    notFlippedCardI.setAttribute("src", "".concat(defaultIcon));
-    flippedCardI.setAttribute("src", "".concat(flippedCardIcon));
+    const notFlippedCardI = document.createElement("img");
+    const flippedCardI = document.createElement("img");
+    notFlippedCardI.setAttribute("src", `${defaultIcon}`);
+    flippedCardI.setAttribute("src", `${flippedCardIcon}`);
     card.append(flippedCardI, notFlippedCardI);
     return card;
 };
-var topGame = document.querySelector(".top");
-var startGame = function (startLevel) {
-    var firstCard = null;
-    var secondCard = null;
-    var clickable = true;
-    var Interval;
-    var seconds = 0;
-    var tens = 0;
-    var restartButton = document.createElement("button");
+//const topGame = document.querySelector(".top");
+const startGame = (startLevel) => {
+    let firstCard = null;
+    let secondCard = null;
+    ;
+    let clickable = true;
+    let Interval;
+    let seconds = 0;
+    let tens = 0;
+    const restartButton = document.createElement("button");
     restartButton.textContent = "Начать заново";
     restartButton.classList.add("restart");
-    var timer = document.createElement("div");
-    var appendSeconds = document.createElement("spent");
-    var appendTens = document.createElement("spent");
+    const timer = document.createElement("div");
+    const appendSeconds = document.createElement("spent");
+    const appendTens = document.createElement("spent");
     appendSeconds.textContent = "00";
     appendTens.textContent = "00";
     appendSeconds.classList.add("timer-count");
     appendTens.classList.add("timer-count");
-    var point = document.createElement("spent");
+    const point = document.createElement("spent");
     point.textContent = ".";
     point.classList.add("timer-count");
     timer.append(appendSeconds, point, appendTens);
-    var imgResult = document.createElement("img");
+    const imgResult = document.createElement("img");
     imgResult.setAttribute("src", "static/celebration.png");
-    var titleResult = document.createElement("h3");
+    const titleResult = document.createElement("h3");
     titleResult.textContent = "Вы выиграли!";
     titleResult.classList.add("victory");
-    var timeResult = document.createElement("h3");
+    const timeResult = document.createElement("h3");
     timeResult.textContent = "Затраченное время!";
     timeResult.classList.add("elapsed-time");
-    var gameSection = document.querySelector(".deck");
-    var gameTable = document.createElement("div");
-    var initCards = generateCardsArray(startLevel);
-    var doubleCards = doubleCardsArray(initCards);
+    const gameSection = document.querySelector(".deck");
+    const gameTable = document.createElement("div");
+    const initCards = generateCardsArray(startLevel);
+    const doubleCards = doubleCardsArray(initCards);
     if (gameSection) {
         gameSection.innerHTML = "";
     }
@@ -181,16 +213,14 @@ var startGame = function (startLevel) {
     gameTable.classList.add("game-table");
     gameTable.classList.add("game-table");
     shuffle(doubleCards);
-    doubleCards.forEach(function (icon) {
-        return gameTable.append(createGameCard("./static/back.svg", icon));
-    });
+    doubleCards.forEach((icon) => gameTable.append(createGameCard("./static/back.svg", icon)));
     if (topGame) {
         topGame.append(timer, restartButton);
     }
     if (gameSection) {
         gameSection.append(gameTable);
     }
-    var cards = document.querySelectorAll(".game-card");
+    const cards = document.querySelectorAll(".game-card");
     restartButton === null || restartButton === void 0 ? void 0 : restartButton.addEventListener("click", renderCardGame);
     function startTimer() {
         tens++;
@@ -211,112 +241,103 @@ var startGame = function (startLevel) {
             appendSeconds.innerHTML = "" + seconds;
         }
     }
-    cards.forEach(function (card, index) {
-        return card.addEventListener("click", function () {
-            clearInterval(Interval);
-            Interval = setInterval(startTimer, 10);
-            if (clickable === true &&
-                !card.classList.contains("successfully")) {
-                card.classList.add("flip");
-                if (firstCard === null) {
-                    firstCard = index;
+    cards.forEach((card, index) => card.addEventListener("click", () => {
+        var _a, _b;
+        clearInterval(Interval);
+        Interval = setInterval(startTimer, 10);
+        if (clickable === true &&
+            !card.classList.contains("successfully")) {
+            card.classList.add("flip");
+            if (firstCard === null) {
+                firstCard = index;
+            }
+            else {
+                if (index !== firstCard) {
+                    secondCard = index;
+                    clickable = false;
+                }
+            }
+            if (firstCard !== null &&
+                secondCard !== null &&
+                firstCard !== secondCard) {
+                if (((_a = cards[firstCard].firstElementChild) === null || _a === void 0 ? void 0 : _a.outerHTML) ===
+                    ((_b = cards[secondCard].firstElementChild) === null || _b === void 0 ? void 0 : _b.outerHTML)) {
+                    setTimeout(() => {
+                        if (firstCard && secondCard) {
+                            cards[firstCard].classList.add("successfully");
+                            cards[secondCard].classList.add("successfully");
+                        }
+                        firstCard = null;
+                        secondCard = null;
+                        clickable = true;
+                        //alert("Вы победили!");
+                    }, 500);
                 }
                 else {
-                    if (index !== firstCard) {
-                        secondCard = index;
-                        clickable = false;
-                    }
-                }
-                if (firstCard !== null &&
-                    secondCard !== null &&
-                    firstCard !== secondCard) {
-                    if (
-                    //@ts-ignore
-                    cards[firstCard].firstElementChild.src ===
-                        //@ts-ignore
-                        cards[secondCard].firstElementChild.src) {
-                        setTimeout(function () {
-                            if (firstCard && secondCard) {
-                                cards[firstCard].classList.add("successfully");
-                                cards[secondCard].classList.add("successfully");
-                            }
-                            firstCard = null;
-                            secondCard = null;
-                            clickable = true;
-                            //alert("Вы победили!");
-                        }, 500);
-                    }
-                    else {
-                        clearInterval(Interval);
-                        //alert("Вы проиграли!");
-                        setTimeout(function () {
-                            appendSeconds.classList.add("set-timer");
-                            appendTens.classList.add("set-timer");
-                            point.classList.add("set-timer");
-                            imgResult.setAttribute("src", "static/dead.png");
-                            titleResult.textContent = "Вы проиграли!";
-                            titleResult.classList.add("victory");
-                            if (resultGame) {
-                                resultGame.classList.add("result");
-                                resultGame.append(imgResult, titleResult, timeResult, timer, restartButton);
-                            }
-                            if (finalScreen && resultGame) {
-                                finalScreen.classList.add("final-screen");
-                                finalScreen.append(resultGame);
-                            }
-                            if (gameScreen) {
-                                gameScreen.classList.add("dark-result");
-                            }
-                        }, 500);
-                    }
+                    clearInterval(Interval);
+                    //alert("Вы проиграли!");
+                    setTimeout(() => {
+                        appendSeconds.classList.add("set-timer");
+                        appendTens.classList.add("set-timer");
+                        point.classList.add("set-timer");
+                        imgResult.setAttribute("src", "static/dead.png");
+                        titleResult.textContent = "Вы проиграли!";
+                        titleResult.classList.add("victory");
+                        if (resultGame) {
+                            resultGame.classList.add("result");
+                            resultGame.append(imgResult, titleResult, timeResult, timer, restartButton);
+                        }
+                        if (finalScreen && resultGame) {
+                            finalScreen.classList.add("final-screen");
+                            finalScreen.append(resultGame);
+                        }
+                        if (gameScreen) {
+                            gameScreen.classList.add("dark-result");
+                        }
+                    }, 500);
                 }
             }
-            if (Array.from(cards).every(function (card) {
-                return card.className.includes("flip");
-            })) {
-                clearInterval(Interval);
-                setTimeout(function () {
-                    appendSeconds.classList.add("set-timer");
-                    appendTens.classList.add("set-timer");
-                    point.classList.add("set-timer");
-                    if (resultGame) {
-                        resultGame.classList.add("result");
-                        resultGame.append(imgResult, titleResult, timeResult, timer, restartButton);
-                    }
-                    if (finalScreen && resultGame) {
-                        finalScreen.classList.add("final-screen");
-                        finalScreen.append(resultGame);
-                    }
-                    if (gameScreen) {
-                        gameScreen.classList.add("dark-result");
-                    }
-                }, 500);
-            }
-        });
-    });
-    setTimeout(function () {
-        cards.forEach(function (card) { return card.classList.remove("flip"); });
+        }
+        if (Array.from(cards).every((card) => card.className.includes("flip"))) {
+            clearInterval(Interval);
+            setTimeout(() => {
+                appendSeconds.classList.add("set-timer");
+                appendTens.classList.add("set-timer");
+                point.classList.add("set-timer");
+                if (resultGame) {
+                    resultGame.classList.add("result");
+                    resultGame.append(imgResult, titleResult, timeResult, timer, restartButton);
+                }
+                if (finalScreen && resultGame) {
+                    finalScreen.classList.add("final-screen");
+                    finalScreen.append(resultGame);
+                }
+                if (gameScreen) {
+                    gameScreen.classList.add("dark-result");
+                }
+            }, 500);
+        }
+    }));
+    setTimeout(() => {
+        cards.forEach((card) => card.classList.remove("flip"));
     }, 5000);
-    cards.forEach(function (card) { return card.classList.add("flip"); });
+    cards.forEach((card) => card.classList.add("flip"));
 };
-var shuffle = function (array) {
-    var _a;
-    var currentIndex = array.length, randomIndex;
+const shuffle = (array) => {
+    let currentIndex = array.length, randomIndex;
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
-        _a = [
+        [array[currentIndex], array[randomIndex]] = [
             array[randomIndex],
             array[currentIndex],
-        ], array[currentIndex] = _a[0], array[randomIndex] = _a[1];
+        ];
     }
     return array;
 };
-var doubleCardsArray = function (array) {
-    return array.reduce(function (res, current) { return res.concat([current, current]); }, []);
-};
-var generateCardsArray = function (startLevel) {
-    var cards = [
+const doubleCardsArray = (array) => array.reduce((res, current) => res.concat([current, current]), []);
+const generateCardsArray = (startLevel) => {
+    const cards = [
         "./static/Spades A.png",
         "./static/Spades K.png",
         "./static/Spades Q.png",
@@ -354,7 +375,7 @@ var generateCardsArray = function (startLevel) {
         "./static/Clubs 7.png",
         "./static/Clubs 6.png",
     ];
-    cards.sort(function () { return Math.random() - 0.5; });
+    cards.sort(() => Math.random() - 0.5);
     switch (startLevel) {
         case "1":
             cards.length = 3;
@@ -368,8 +389,9 @@ var generateCardsArray = function (startLevel) {
         default:
             break;
     }
+    return cards;
 };
-var cardsApp = function () {
+const cardsApp = () => {
     renderCardGame();
 };
 cardsApp();

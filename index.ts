@@ -66,14 +66,18 @@ const renderCardGame = () => {
         const startButton: HTMLButtonElement | null = document.querySelector(".start-button");
 
         const buttonsLevel = document.querySelectorAll(".level");
-        for (let button of buttonsLevel as any) {
-          button.parentElement?.addEventListener("click", function () {
-            for (let button of buttonsLevel as any) {
-              button.parentElement?.classList.remove("chosen");
+       
+            for (const button of buttonsLevel) {
+                button.addEventListener("click", function () {
+                    if(buttonsLevel){
+                    for (const button of buttonsLevel) {
+              button.classList.remove("chosen");
             }
             button.parentElement?.classList.add("chosen");
-          });
-        }
+                    }  
+        });
+        };
+    
 
     function isChosenLevel() {
         
