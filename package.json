@@ -27,14 +27,15 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
+  
+  "name": "hw3rdcourse",
+  "version": "1.0.0",
+  "main": "index.ts",
   "husky": {
     "hooks": {
       "pre-commit": "npm run test"
     }
   },
-  "name": "hw3rdcourse",
-  "version": "1.0.0",
-  "main": "index.ts",
   "scripts": {
     "test": "jest",
     "format": "prettier --write .",
